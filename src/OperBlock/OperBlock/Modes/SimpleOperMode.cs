@@ -4,40 +4,21 @@ using System.Device;
 
 namespace OperBlock.Modes
 {
-    public class SimpleOperMode : IOperMode
+    public class SimpleOperMode : OperModeBase
     {
-        public Lamp[] Lamps { get; private set; }
-
-        public SimpleOperMode(Lamp[] lamps)
+        public SimpleOperMode(Lamp[] lamps) 
+            : base(lamps)
         {
-            Lamps = lamps;
         }
-
-        public void Start()
-        {
-            foreach (var lamp in Lamps)
-            {
-                lamp.ToggleOn();
-            }
-        }
-
-        public void Stop()
-        {
-            foreach (var lamp in Lamps)
-            {
-                lamp.SetBrightness(0);
-                lamp.ToggleOff();
-            }
-        }
-
-        public void Tick()
+        
+        public override void Tick()
         {
             foreach (var lamp in Lamps)
             {
                 lamp.SetBrightness(1f);
             }
 
-            DelayHelper.DelayMilliseconds(200, true);
+            DelayHelper.DelayMilliseconds(100, true);
 
             foreach (var lamp in Lamps)
             {

@@ -2,6 +2,7 @@
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props')" />
   <PropertyGroup>
@@ -19,14 +20,22 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Lamp.cs" />
+    <Compile Include="Modes\DebugOperMode.cs" />
+    <Compile Include="Modes\EnrageStockMode.cs" />
     <Compile Include="Modes\IOperMode.cs" />
     <Compile Include="Modes\ManualOperMode.cs" />
+    <Compile Include="Modes\OperModeBase.cs" />
     <Compile Include="Modes\PairBlinkOperMode.cs" />
     <Compile Include="Modes\SimpleOperMode.cs" />
+    <Compile Include="Modes\StockOperMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebServer\ControllerOper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Iot.Device.Button, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
+      <HintPath>..\packages\nanoFramework.Iot.Device.Button.1.2.436\lib\Iot.Device.Button.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib, Version=1.15.6.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
     </Reference>
@@ -39,11 +48,17 @@
     <Reference Include="nanoFramework.Runtime.Native, Version=1.6.12.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
       <HintPath>..\packages\nanoFramework.Runtime.Native.1.6.12\lib\nanoFramework.Runtime.Native.dll</HintPath>
     </Reference>
+    <Reference Include="System.Device.Gpio, Version=1.1.38.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
+      <HintPath>..\packages\nanoFramework.System.Device.Gpio.1.1.38\lib\System.Device.Gpio.dll</HintPath>
+    </Reference>
     <Reference Include="System.Device.Pwm, Version=1.1.10.32951, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
       <HintPath>..\packages\nanoFramework.System.Device.Pwm.1.1.10\lib\System.Device.Pwm.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.Stopwatch, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
       <HintPath>..\packages\nanoFramework.System.Diagnostics.Stopwatch.1.2.418\lib\System.Diagnostics.Stopwatch.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Math, Version=1.5.43.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
+      <HintPath>..\packages\nanoFramework.System.Math.1.5.43\lib\System.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

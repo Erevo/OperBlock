@@ -1,4 +1,5 @@
-﻿using System.Device.Pwm;
+﻿using System;
+using System.Device.Pwm;
 
 namespace OperBlock
 {
@@ -14,7 +15,7 @@ namespace OperBlock
         public bool Enabled { get; private set; }
         public float Brightness { get; set; }
 
-        public void ToggleOn()
+        public void ToggleOn(float brightness = 1f)
         {
             if (Enabled)
             {
@@ -22,6 +23,8 @@ namespace OperBlock
             }
             
             _pwmChannel.Start();
+            SetBrightness(brightness);
+            
             Enabled = true;
         }
 
@@ -31,8 +34,10 @@ namespace OperBlock
             {
                 return;
             }
-            
+
+            SetBrightness(0f);
             _pwmChannel.Stop();
+            
             Enabled = false;
         }
 

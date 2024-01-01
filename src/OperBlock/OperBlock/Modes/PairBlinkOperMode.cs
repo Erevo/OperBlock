@@ -4,37 +4,18 @@ using System.Device;
 
 namespace OperBlock.Modes
 {
-    public class PairBlinkOperMode : IOperMode
+    public class PairBlinkOperMode : OperModeBase
     {
         private bool _flag;
 
-        public Lamp[] Lamps { get; private set; }
-
-        public PairBlinkOperMode(Lamp[] lamps)
+        public PairBlinkOperMode(Lamp[] lamps) 
+            : base(lamps)
         {
-            Lamps = lamps;
         }
 
-        public void Start()
+        public override void Tick()
         {
-            foreach (var lamp in Lamps)
-            {
-                lamp.ToggleOn();
-            }
-        }
-
-        public void Stop()
-        {
-            foreach (var lamp in Lamps)
-            {
-                lamp.SetBrightness(0);
-                lamp.ToggleOff();
-            }
-        }
-
-        public void Tick()
-        {
-            for (int i = 0; i < Lamps.Length; i++)
+            for (var i = 0; i < Lamps.Length; i++)
             {
                 if (i % 2 == 0)
                 {
