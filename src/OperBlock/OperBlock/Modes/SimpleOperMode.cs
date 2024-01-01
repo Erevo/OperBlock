@@ -4,13 +4,11 @@ using System.Device;
 
 namespace OperBlock.Modes
 {
-    public class PairBlinkOperMode : IOperMode
+    public class SimpleOperMode : IOperMode
     {
-        private bool _flag;
-
         public Lamp[] Lamps { get; private set; }
 
-        public PairBlinkOperMode(Lamp[] lamps)
+        public SimpleOperMode(Lamp[] lamps)
         {
             Lamps = lamps;
         }
@@ -34,20 +32,19 @@ namespace OperBlock.Modes
 
         public void Tick()
         {
-            for (int i = 0; i < Lamps.Length; i++)
+            foreach (var lamp in Lamps)
             {
-                if (i % 2 == 0)
-                {
-                    Lamps[i].SetBrightness(_flag ? 1f : 0);
-                }
-                else
-                {
-                    Lamps[i].SetBrightness(_flag ? 0f : 1f);
-                }
+                lamp.SetBrightness(1f);
             }
 
-            _flag = !_flag;
-            DelayHelper.DelayMilliseconds(100, true);
+            DelayHelper.DelayMilliseconds(200, true);
+
+            foreach (var lamp in Lamps)
+            {
+                lamp.SetBrightness(0f);
+            }
+
+            DelayHelper.DelayMilliseconds(200, true);
         }
     }
 }

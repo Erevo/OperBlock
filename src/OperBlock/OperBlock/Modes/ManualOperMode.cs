@@ -25,6 +25,7 @@ namespace OperBlock.Modes
         {
             foreach (var lamp in Lamps)
             {
+                lamp.SetBrightness(0);
                 lamp.ToggleOff();
             }
         }
@@ -36,7 +37,7 @@ namespace OperBlock.Modes
                 lamp.SetBrightness( lamp.Brightness > 0 ? 0f : 1f);
             }
 
-            DelayHelper.DelayMilliseconds(12, true);
+            DelayHelper.DelayMilliseconds(12, false);
         }
     }
 }

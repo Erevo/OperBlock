@@ -22,6 +22,7 @@
     <Compile Include="Modes\IOperMode.cs" />
     <Compile Include="Modes\ManualOperMode.cs" />
     <Compile Include="Modes\PairBlinkOperMode.cs" />
+    <Compile Include="Modes\SimpleOperMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

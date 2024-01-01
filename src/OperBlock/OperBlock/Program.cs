@@ -23,6 +23,7 @@ namespace OperBlock
         {
             new ManualOperMode(_lamps),
             new PairBlinkOperMode(_lamps),
+            new SimpleOperMode(_lamps),
         };
 
         public static IOperMode CurrentOperMode { get; set; } = OperModes[0];
@@ -48,7 +49,7 @@ namespace OperBlock
             {
                 foreach (var operMode in OperModes)
                 {
-                    DelayHelper.DelayMilliseconds(2000, true);
+                    DelayHelper.DelayMilliseconds(1000, true);
                     SetOperMode(operMode);
                 }
             }

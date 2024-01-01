@@ -7,6 +7,7 @@ namespace OperBlock.Modes
         public Lamp[] Lamps { get; }
 
         public void Start();
+
         public void Stop();
         
         public void Tick();
