@@ -19,7 +19,7 @@ namespace OperBlock.Modes
         {
             foreach (var lamp in Lamps)
             {
-                lamp.ToggleOn(0f);
+                lamp.ToggleOn(1f);
             }
         }
 

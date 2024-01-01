@@ -22,7 +22,7 @@ namespace OperBlock.Modes
 
             foreach (var lamp in Lamps)
             {
-                lamp.ToggleOn(0f);
+                lamp.ToggleOn(_button.IsPressed ? 1f : 0f);
             }
         }
 

@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Device;
 using System.Device.Pwm;
 using System.Diagnostics;
 using System.Threading;
 using Iot.Device.Button;
 using nanoFramework.Hardware.Esp32;
+using nanoFramework.WebServer;
 using OperBlock.Modes;
+
 
 namespace OperBlock
 {
@@ -16,11 +16,7 @@ namespace OperBlock
 
         private static GpioButton? _button;
 
-        private static Lamp[] _lamps = new[]
-        {
-            new Lamp(PwmChannel.CreateFromPin(LampsPins[0], 40000, 0f)),
-            new Lamp(PwmChannel.CreateFromPin(LampsPins[1], 40000, 0f)),
-        };
+        public static Lamp[] Lamps { get; private set; } = new Lamp[0];
 
         private static IOperMode[] OperModes { get; set; } = new IOperMode[0];
 
@@ -33,13 +29,19 @@ namespace OperBlock
             _button.IsHoldingEnabled = true;
             _button.IsDoublePressEnabled = true;
 
+            Lamps = new[]
+            {
+                new Lamp(PwmChannel.CreateFromPin(LampsPins[0], 40000, 0f)),
+                new Lamp(PwmChannel.CreateFromPin(LampsPins[1], 40000, 0f)),
+            };
+
             OperModes = new IOperMode[]
             {
-                new StockOperMode(_lamps, _button),
-                new EnrageStockMode(_lamps, _button),
-                new ManualOperMode(_lamps),
-                new PairBlinkOperMode(_lamps),
-                new SimpleOperMode(_lamps),
+                new StockOperMode(Lamps, _button),
+                new EnrageStockMode(Lamps, _button),
+                new ManualOperMode(Lamps),
+                new PairBlinkOperMode(Lamps),
+                new SimpleOperMode(Lamps),
             };
 
             Configuration.SetPinFunction(LampsPins[0], DeviceFunction.PWM1);
@@ -59,7 +61,10 @@ namespace OperBlock
 
             _button.Holding += ButtonOnHolding;
             _button.DoublePress += ButtonOnDoublePress;
-            
+
+            WifiController.Init();
+            WebController.Init();
+
             Thread.Sleep(Timeout.Infinite);
         }
 
@@ -70,7 +75,7 @@ namespace OperBlock
                 SetOperMode(OperModes[0]);
             }
         }
-        
+
         private static void ButtonOnDoublePress(object sender, EventArgs e)
         {
             Debug.WriteLine(nameof(ButtonOnDoublePress));
