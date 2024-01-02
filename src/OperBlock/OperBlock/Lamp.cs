@@ -22,7 +22,7 @@ namespace OperBlock
                 return;
             }
             
-            _pwmChannel.Start();
+            //_pwmChannel.Start();
             SetBrightness(brightness);
             
             Enabled = true;
@@ -36,7 +36,7 @@ namespace OperBlock
             }
 
             SetBrightness(0f);
-            _pwmChannel.Stop();
+            //_pwmChannel.Stop();
             
             Enabled = false;
         }

@@ -29,6 +29,9 @@ namespace OperBlock
             _button.IsHoldingEnabled = true;
             _button.IsDoublePressEnabled = true;
 
+            Configuration.SetPinFunction(LampsPins[0], DeviceFunction.PWM1);
+            Configuration.SetPinFunction(LampsPins[1], DeviceFunction.PWM2);
+
             Lamps = new[]
             {
                 new Lamp(PwmChannel.CreateFromPin(LampsPins[0], 40000, 0f)),
@@ -44,8 +47,6 @@ namespace OperBlock
                 new SimpleOperMode(Lamps),
             };
 
-            Configuration.SetPinFunction(LampsPins[0], DeviceFunction.PWM1);
-            Configuration.SetPinFunction(LampsPins[1], DeviceFunction.PWM2);
 
             Debug.WriteLine("Hello from OperBlock!");
 
