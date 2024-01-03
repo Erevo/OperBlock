@@ -1,4 +1,5 @@
 using System;
+using System.Device;
 using System.Device.Gpio;
 using System.Device.Pwm;
 using System.Diagnostics;
@@ -32,9 +33,9 @@ namespace OperBlock
         {
             _gpioController = new GpioController();
 
-            _button = new GpioButton(21, TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(1000), _gpioController, false);
+            _button = new GpioButton(21, TimeSpan.FromMilliseconds(400), TimeSpan.FromMilliseconds(1000), _gpioController, false, debounceTime: TimeSpan.FromMilliseconds(50));
 
-            _button.IsHoldingEnabled = true;
+            //_button.IsHoldingEnabled = true;
             _button.IsDoublePressEnabled = true;
 
             Configuration.SetPinFunction(LampsPins[0], DeviceFunction.PWM1);
@@ -66,13 +67,13 @@ namespace OperBlock
 
             Debug.WriteLine("Hello from OperBlock!");
 
-            _button.Holding += ButtonOnHolding;
+            //_button.Holding += ButtonOnHolding;
             _button.DoublePress += ButtonOnDoublePress;
 
             WifiController.Init();
             WebController.Init();
 
-
+            SetOperMode(OperModes[0]);
             while (true)
             {
                 if (WifiController.IsConnected == false && _currentOperMode != OperModes[0])
@@ -83,6 +84,7 @@ namespace OperBlock
                 _currentOperMode?.Tick();
 
                 Debug.WriteLine($"Heartbeat [{DateTime.UtcNow:HH':'mm':'ss.fff}] | _button.IsPressed: {_button.IsPressed} {_gpioController.Read(21)}");
+                DelayHelper.DelayMilliseconds(1, true);
             }
 
             Thread.Sleep(Timeout.Infinite);
@@ -96,10 +98,17 @@ namespace OperBlock
             }
         }
 
+        private static int _curModeIndex = 0;
         private static void ButtonOnDoublePress(object sender, EventArgs e)
         {
+            _curModeIndex += 1;
+            if (_curModeIndex == OperModes.Length)
+            {
+                _curModeIndex = 0;
+            }
+
             Debug.WriteLine(nameof(ButtonOnDoublePress));
-            SetOperMode(OperModes[3]);
+            SetOperMode(OperModes[_curModeIndex]);
         }
 
         public static void SetOperMode(IOperMode operMode)

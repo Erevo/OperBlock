@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Device;
 using System.Device.Wifi;
 using System.Diagnostics;
 using System.Net;
@@ -35,7 +36,7 @@ namespace OperBlock
 
                     IsConnected = isConnected;
 
-                    Thread.Sleep(100);
+                    DelayHelper.DelayMilliseconds(100, true);
                 }
             }).Start();
 

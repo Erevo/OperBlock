@@ -15,38 +15,11 @@ namespace OperBlock.Modes
             _button = button;
         }
 
-        public override void Start()
-        {
-            _button.ButtonDown += ButtonOnButtonDown;
-            _button.ButtonUp += ButtonOnButtonUp;
-
-            foreach (var lamp in Lamps)
-            {
-                lamp.ToggleOn(_button.IsPressed ? 1f : 0f);
-            }
-        }
-
-        public override void Stop()
-        {
-            _button.ButtonDown -= ButtonOnButtonDown;
-            _button.ButtonUp -= ButtonOnButtonUp;
-
-            base.Stop();
-        }
-
-        private void ButtonOnButtonDown(object sender, EventArgs e)
+        public override void Tick()
         {
             foreach (var lamp in Lamps)
             {
-                lamp.SetBrightness(1f);
-            }
-        }
-
-        private void ButtonOnButtonUp(object sender, EventArgs e)
-        {
-            foreach (var lamp in Lamps)
-            {
-                lamp.SetBrightness(0f);
+                lamp.SetBrightness(_button.IsPressed ? 1f : 0f);
             }
         }
     }
