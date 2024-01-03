@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Device;
-using Iot.Device.Button;
+using nanoFramework.EncButton.Core;
 
 namespace OperBlock.Modes
 {
@@ -8,9 +8,9 @@ namespace OperBlock.Modes
     {
         private bool _pressedFlag;
         
-        private GpioButton _button;
+        private Button _button;
 
-        public EnrageStockMode(Lamp[] lamps, GpioButton button, TimeSpan delay)
+        public EnrageStockMode(Lamp[] lamps, Button button, TimeSpan delay)
             : base(lamps)
         {
             _button = button;
@@ -21,7 +21,8 @@ namespace OperBlock.Modes
 
         public override void Tick()
         {
-            if (_button.IsPressed)
+            if (true)
+            //if (_button.IsPressed)
             {
                 _pressedFlag = true;
                 

@@ -35,7 +35,7 @@
     <Compile Include="WifiController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Iot.Device.Button, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
+    <Reference Include="Iot.Device.Button">
       <HintPath>..\packages\nanoFramework.Iot.Device.Button.1.2.436\lib\Iot.Device.Button.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib, Version=1.15.6.0, Culture=neutral, PublicKeyToken=c07d481e9758c731, processorArchitecture=MSIL">
@@ -92,6 +92,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\nanoFramework.EncButton\src\nanoFramework.EncButton\nanoFramework.EncButton\nanoFramework.EncButton.nfproj">
+      <Project>{b96406b6-83f8-4c0d-8ba8-f63dbb7bae25}</Project>
+      <Name>nanoFramework.EncButton</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>

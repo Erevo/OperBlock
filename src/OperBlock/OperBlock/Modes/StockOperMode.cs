@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Device.Gpio;
 using System.Diagnostics;
-using Iot.Device.Button;
+using nanoFramework.EncButton.Core;
 
 namespace OperBlock.Modes
 {
     public class StockOperMode : OperModeBase
     {
-        private GpioButton _button;
+        private Button _button;
 
-        public StockOperMode(Lamp[] lamps, GpioButton button)
+        public StockOperMode(Lamp[] lamps, Button button)
             : base(lamps)
         {
             _button = button;
@@ -19,7 +19,8 @@ namespace OperBlock.Modes
         {
             foreach (var lamp in Lamps)
             {
-                lamp.SetBrightness(_button.IsPressed ? 1f : 0f);
+                //lamp.SetBrightness(_button.IsPressed ? 1f : 0f);
+                lamp.SetBrightness(true ? 1f : 0f);
             }
         }
     }

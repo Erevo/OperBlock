@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Device.Gpio;
 using System.Diagnostics;
-using Iot.Device.Button;
+using nanoFramework.EncButton.Core;
 
 namespace OperBlock.Modes
 {
     public class DebugOperMode : OperModeBase
     {
-        private GpioButton _button;
+        private Button _button;
 
-        public DebugOperMode(Lamp[] lamps, GpioButton button)
+        public DebugOperMode(Lamp[] lamps, Button button)
             : base(lamps)
         {
             _button = button;
@@ -17,8 +17,8 @@ namespace OperBlock.Modes
 
         public override void Start()
         {
-            _button.ButtonDown += ButtonOnButtonDown;
-            _button.ButtonUp += ButtonOnButtonUp;
+            // _button.ButtonDown += ButtonOnButtonDown;
+            // _button.ButtonUp += ButtonOnButtonUp;
 
             foreach (var lamp in Lamps)
             {
@@ -28,8 +28,8 @@ namespace OperBlock.Modes
 
         public override void Stop()
         {
-            _button.ButtonDown -= ButtonOnButtonDown;
-            _button.ButtonUp -= ButtonOnButtonUp;
+            // _button.ButtonDown -= ButtonOnButtonDown;
+            // _button.ButtonUp -= ButtonOnButtonUp;
 
             base.Stop();
         }

@@ -3,14 +3,10 @@ using System.Device;
 using System.Device.Gpio;
 using System.Device.Pwm;
 using System.Diagnostics;
-using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 using Iot.Device.Button;
+using nanoFramework.EncButton.Core;
 using nanoFramework.Hardware.Esp32;
-using nanoFramework.Networking;
-using nanoFramework.Runtime.Native;
-using nanoFramework.WebServer;
 using OperBlock.Modes;
 
 
@@ -21,7 +17,7 @@ namespace OperBlock
         private static GpioController? _gpioController;
         private static readonly byte[] LampsPins = { 2, 4, 18, 17 };
 
-        private static GpioButton? _button;
+        private static Button? _button;
 
         public static Lamp[] Lamps { get; private set; } = new Lamp[0];
 
@@ -33,10 +29,11 @@ namespace OperBlock
         {
             _gpioController = new GpioController();
 
-            _button = new GpioButton(21, TimeSpan.FromMilliseconds(400), TimeSpan.FromMilliseconds(1000), _gpioController, false, debounceTime: TimeSpan.FromMilliseconds(50));
+             new GpioButton(21, TimeSpan.FromMilliseconds(400), TimeSpan.FromMilliseconds(1000), _gpioController, false, debounceTime: TimeSpan.FromMilliseconds(50));
+            _button = new Button(0, gpioController: _gpioController);
 
             //_button.IsHoldingEnabled = true;
-            _button.IsDoublePressEnabled = true;
+            ////_button.IsDoublePressEnabled = true;
 
             Configuration.SetPinFunction(LampsPins[0], DeviceFunction.PWM1);
             Configuration.SetPinFunction(LampsPins[1], DeviceFunction.PWM2);
@@ -68,7 +65,7 @@ namespace OperBlock
             Debug.WriteLine("Hello from OperBlock!");
 
             //_button.Holding += ButtonOnHolding;
-            _button.DoublePress += ButtonOnDoublePress;
+            ////_button.DoublePress += ButtonOnDoublePress;
 
             WifiController.Init();
             WebController.Init();
@@ -76,6 +73,8 @@ namespace OperBlock
             SetOperMode(OperModes[0]);
             while (true)
             {
+                _button.tick();
+
                 if (WifiController.IsConnected == false && _currentOperMode != OperModes[0])
                 {
                     SetOperMode(OperModes[0]);
@@ -83,20 +82,21 @@ namespace OperBlock
 
                 _currentOperMode?.Tick();
 
-                Debug.WriteLine($"Heartbeat [{DateTime.UtcNow:HH':'mm':'ss.fff}] | _button.IsPressed: {_button.IsPressed} {_gpioController.Read(21)}");
+                Debug.WriteLine($"Heartbeat [{DateTime.UtcNow:HH':'mm':'ss.fff}] | _button.IsPressed: {_button.pressing()} {_gpioController.Read(0)}");
+                //Debug.WriteLine($"Heartbeat [{DateTime.UtcNow:HH':'mm':'ss.fff}] | _button.IsPressed: {_gpioController.Read(0)}");
                 DelayHelper.DelayMilliseconds(1, true);
             }
 
             Thread.Sleep(Timeout.Infinite);
         }
 
-        private static void ButtonOnHolding(object sender, ButtonHoldingEventArgs e)
-        {
-            if (_currentOperMode != OperModes[0])
-            {
-                SetOperMode(OperModes[0]);
-            }
-        }
+        // private static void ButtonOnHolding(object sender, ButtonHoldingEventArgs e)
+        // {
+        //     if (_currentOperMode != OperModes[0])
+        //     {
+        //         SetOperMode(OperModes[0]);
+        //     }
+        // }
 
         private static int _curModeIndex = 0;
         private static void ButtonOnDoublePress(object sender, EventArgs e)
