@@ -1,4 +1,5 @@
 using System;
+using System.Device.Gpio;
 using System.Device.Pwm;
 using System.Diagnostics;
 using System.Net;
@@ -16,6 +17,7 @@ namespace OperBlock
 {
     public class Program
     {
+        private static GpioController? _gpioController;
         private static readonly byte[] LampsPins = { 2, 4, 18, 17 };
 
         private static GpioButton? _button;
@@ -28,7 +30,9 @@ namespace OperBlock
 
         public static void Main()
         {
-            _button = new GpioButton(0, TimeSpan.FromMilliseconds(300), TimeSpan.FromMilliseconds(2000));
+            _gpioController = new GpioController();
+
+            _button = new GpioButton(21, TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(1000), _gpioController, false);
 
             _button.IsHoldingEnabled = true;
             _button.IsDoublePressEnabled = true;
@@ -62,25 +66,24 @@ namespace OperBlock
 
             Debug.WriteLine("Hello from OperBlock!");
 
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    if(WifiController.IsConnected == false && _currentOperMode != OperModes[0])
-                    {
-                        SetOperMode(OperModes[0]);
-                    }
-
-                    _currentOperMode?.Tick();
-                }
-            }).Start();
-
             _button.Holding += ButtonOnHolding;
             _button.DoublePress += ButtonOnDoublePress;
 
             WifiController.Init();
             WebController.Init();
 
+
+            while (true)
+            {
+                if (WifiController.IsConnected == false && _currentOperMode != OperModes[0])
+                {
+                    SetOperMode(OperModes[0]);
+                }
+
+                _currentOperMode?.Tick();
+
+                Debug.WriteLine($"Heartbeat [{DateTime.UtcNow:HH':'mm':'ss.fff}] | _button.IsPressed: {_button.IsPressed} {_gpioController.Read(21)}");
+            }
 
             Thread.Sleep(Timeout.Infinite);
         }
