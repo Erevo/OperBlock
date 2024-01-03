@@ -7,13 +7,16 @@ namespace OperBlock
     {
         private readonly PwmChannel _pwmChannel;
         
-        public Lamp(PwmChannel pwmChannel)
+        public Lamp(PwmChannel pwmChannel, float maxBrightness = 1f)
         {
             _pwmChannel = pwmChannel;
+            MaxBrightness = maxBrightness;
         }
 
         public bool Enabled { get; private set; }
-        public float Brightness { get; set; }
+        public float Brightness { get; private set; }
+
+        public float MaxBrightness { get; set; }
 
         public void ToggleOn(float brightness = 1f)
         {
@@ -43,6 +46,8 @@ namespace OperBlock
 
         public void SetBrightness(float level)
         {
+            level = Math.Clamp(level, 0f, MaxBrightness);
+
             Brightness = level;
             _pwmChannel.DutyCycle = level;
         }

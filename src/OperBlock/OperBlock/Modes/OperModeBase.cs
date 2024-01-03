@@ -13,7 +13,7 @@
         {
             foreach (var lamp in Lamps)
             {
-                lamp.ToggleOn();
+                lamp.ToggleOn(0f);
             }
         }
 

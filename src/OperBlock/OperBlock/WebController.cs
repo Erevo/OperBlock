@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
 using nanoFramework.Json;
 using nanoFramework.WebServer;
 using OperBlock.Web;
@@ -7,15 +9,42 @@ namespace OperBlock
 {
     public class WebController
     {
+        private static WebServer _webServer = new WebServer(80, HttpProtocol.Http);
 
+        private static MethodInfo[]? _methods;
 
         public static void Init()
         {
-            using var webServer = new WebServer(80, HttpProtocol.Http);
+            try
+            {
+                _webServer = new WebServer(80, HttpProtocol.Http);
+                if (WifiController.IsConnected)
+                {
+                    _webServer.Start();
+                    _webServer.CommandReceived += WebServerOnCommandReceived;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine($"Test {ex.Message}");
+            }
 
-            webServer.Start();
-            webServer.CommandReceived += WebServerOnCommandReceived;
+            WifiController.Connected += OnWifiControllerConnected;
+            WifiController.Disconnected += OnWifiControllerDisconnected;
         }
+
+        private static void OnWifiControllerConnected()
+        {
+            _webServer.Start();
+            _webServer.CommandReceived += WebServerOnCommandReceived;
+        }
+
+        private static void OnWifiControllerDisconnected()
+        {
+            _webServer.Stop();
+            _webServer.CommandReceived -= WebServerOnCommandReceived;
+        }
+
 
         private static void WebServerOnCommandReceived(object obj, WebServerEventArgs e)
         {
@@ -29,9 +58,12 @@ namespace OperBlock
 
             var targetMethodName = a[0];
 
-            var methods = typeof(ControllerOper).GetMethods();
+            if (_methods == null)
+            {
+                _methods = typeof(ControllerOper).GetMethods();
+            }
 
-            foreach (var method in methods)
+            foreach (var method in _methods)
             {
                 if (rawUrl.StartsWith(targetMethodName))
                 {

@@ -30,5 +30,30 @@ namespace OperBlock.Web
                 lamp.ToggleOn();
             }
         }
+        
+        public static void SetMaxBrightness(string lampIndex, string lampMaxBrightness)
+        {
+            if (!int.TryParse(lampIndex, out var index))
+            {
+                return;
+            }
+
+            if (!float.TryParse(lampMaxBrightness, out var maxBrightness))
+            {
+                return;
+            }
+
+            maxBrightness /= 100f;
+
+            var lamps = Program.Lamps;
+            if (index > lamps.Length)
+            {
+                return;
+            }
+
+            var lamp = Program.Lamps[index];
+            lamp.MaxBrightness = maxBrightness;
+            lamp.SetBrightness(maxBrightness);
+        }
     }
 }
