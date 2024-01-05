@@ -21,8 +21,7 @@ namespace OperBlock.Modes
 
         public override void Tick()
         {
-            if (true)
-            //if (_button.IsPressed)
+            if (_button.ReadRaw())
             {
                 _pressedFlag = true;
                 

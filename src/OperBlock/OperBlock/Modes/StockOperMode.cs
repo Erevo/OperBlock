@@ -17,10 +17,11 @@ namespace OperBlock.Modes
 
         public override void Tick()
         {
+            var btnState = _button.ReadRaw();
+
             foreach (var lamp in Lamps)
             {
-                //lamp.SetBrightness(_button.IsPressed ? 1f : 0f);
-                lamp.SetBrightness(true ? 1f : 0f);
+                lamp.SetBrightness(btnState ? 1f : 0f);
             }
         }
     }
