@@ -46,7 +46,7 @@ namespace OperBlock.Modes
 
             if (_ledStrip != null)
             {
-                if (_stripTimerMs + 200 <= millis)
+                if (_stripTimerMs + 100 <= millis)
                 {
                     _ledStrip.ToggleHalf(_stripFlag, _stripFlag ? Color.Red : Color.Blue);
                     _ledStrip.ToggleHalf(!_stripFlag, Color.Black);

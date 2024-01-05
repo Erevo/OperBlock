@@ -93,7 +93,7 @@ namespace OperBlock
             for (var i = 0; i < LampsPins.Length; i++)
             {
                 Configuration.SetPinFunction(LampsPins[i], Pwms[i]);
-                Lamps[i] = new Lamp(PwmChannel.CreateFromPin(LampsPins[i], 40000, 0f), 0.6f);
+                Lamps[i] = new Lamp(PwmChannel.CreateFromPin(LampsPins[i], 40000, 0f), 0.5f);
             }
         }
 
@@ -114,7 +114,7 @@ namespace OperBlock
                 };
                 var spi = SpiDevice.Create(settings);
 
-                var ledStrip = new LedStrip(21, new Ws2815b(spi, 21));
+                var ledStrip = new LedStrip(218, new Ws2815b(spi, 218));
                 LedStrips[i] = ledStrip;
             }
         }

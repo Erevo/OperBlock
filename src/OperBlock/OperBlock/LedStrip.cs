@@ -8,6 +8,7 @@ namespace OperBlock
 {
     public class LedStrip
     {
+        private bool _needUpdateFlag;
         private long _updateTimer;
 
         public LedStrip(int ledsCount, Ws28xx ws28Xx)
@@ -23,6 +24,13 @@ namespace OperBlock
 
         public void ToggleHalf(bool left, Color color)
         {
+            var multiplayer = 0.1f;
+
+            color = Color.FromArgb(
+                (byte)(color.R * multiplayer),
+                (byte)(color.G * multiplayer),
+                (byte)(color.B * multiplayer)
+                );
             var img = Ws28xx.Image;
             if (left)
             {
@@ -44,11 +52,6 @@ namespace OperBlock
         {
             //var millis = Environment.TickCount64;
 
-            //if (_updateTimer + 10 > millis)
-            //{
-            //    return;
-            //}
-            //_updateTimer = millis;
             Ws28xx.Update();
         }
     }
